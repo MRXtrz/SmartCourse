@@ -27,6 +27,7 @@ export const API_ENDPOINTS = {
   },
   ai: {
     chat: `${API_BASE_URL}/api/ai/chat`,
+    assignmentCheck: `${API_BASE_URL}/api/ai/assignment/check`,
   },
   assignments: {
     byLesson: (lessonId: number) => `${API_BASE_URL}/assignments/lessons/${lessonId}/assignments`,

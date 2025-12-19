@@ -85,6 +85,20 @@ export interface AIChatResponse {
   answer: string;
 }
 
+export interface AIAssignmentCheckRequest {
+  course_title: string;
+  lesson_title: string;
+  assignment_title: string;
+  assignment_instructions: string;
+  user_answer: string;
+}
+
+export interface AIAssignmentCheckResponse {
+  is_correct: boolean;
+  explanation: string;
+  suggested_answer?: string;
+}
+
 export interface Message {
   id: string;
   role: 'user' | 'assistant';

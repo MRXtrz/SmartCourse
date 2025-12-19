@@ -2,7 +2,11 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import api from '../services/api';
 import { API_ENDPOINTS } from '../config/api';
-import type { LessonWithProgress, AssignmentWithSubmission } from '../types';
+import type {
+  LessonWithProgress,
+  AssignmentWithSubmission,
+  AIAssignmentCheckResponse,
+} from '../types';
 import AITutor from '../components/AITutor';
 import { 
   BookOpen, 
@@ -27,6 +31,8 @@ const CoursePage = () => {
   const [selectedAssignment, setSelectedAssignment] = useState<AssignmentWithSubmission | null>(null);
   const [assignmentAnswer, setAssignmentAnswer] = useState('');
   const [submittingAssignment, setSubmittingAssignment] = useState(false);
+  const [checkingAssignment, setCheckingAssignment] = useState(false);
+  const [assignmentCheckResult, setAssignmentCheckResult] = useState<AIAssignmentCheckResponse | null>(null);
 
   useEffect(() => {
     if (id) {
@@ -97,6 +103,40 @@ const CoursePage = () => {
       alert('Ошибка при отправке задания');
     } finally {
       setSubmittingAssignment(false);
+    }
+  };
+
+  const handleCheckAssignmentWithAI = async (mode: 'check' | 'help') => {
+    if (!selectedLesson || !selectedAssignment) return;
+
+    const answerToSend =
+      mode === 'help'
+        ? assignmentAnswer.trim() || 'не знаю'
+        : assignmentAnswer.trim();
+
+    if (!answerToSend) {
+      alert('Введите ответ или нажмите "Помоги решить", если вы не знаете ответ');
+      return;
+    }
+
+    setCheckingAssignment(true);
+    setAssignmentCheckResult(null);
+
+    try {
+      const res = await api.post<AIAssignmentCheckResponse>(API_ENDPOINTS.ai.assignmentCheck, {
+        course_title: course?.title || '',
+        lesson_title: selectedLesson.title,
+        assignment_title: selectedAssignment.title,
+        assignment_instructions: selectedAssignment.instructions,
+        user_answer: answerToSend,
+      });
+
+      setAssignmentCheckResult(res.data);
+    } catch (error) {
+      console.error('Failed to check assignment with AI:', error);
+      alert('Ошибка при проверке задания ИИ');
+    } finally {
+      setCheckingAssignment(false);
     }
   };
 
@@ -328,14 +368,74 @@ const CoursePage = () => {
                               </div>
 
                               {!assignment.submission && (
-                                <button
-                                  onClick={handleSubmitAssignment}
-                                  disabled={submittingAssignment || !assignmentAnswer.trim()}
-                                  className="btn-primary flex items-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                                <div className="flex flex-wrap gap-3 items-center">
+                                  <button
+                                    onClick={handleSubmitAssignment}
+                                    disabled={submittingAssignment || !assignmentAnswer.trim()}
+                                    className="btn-primary flex items-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                                  >
+                                    <Send className="w-5 h-5" />
+                                    <span>{submittingAssignment ? 'Отправка...' : 'Отправить задание'}</span>
+                                  </button>
+
+                                  <button
+                                    type="button"
+                                    onClick={() => handleCheckAssignmentWithAI('check')}
+                                    disabled={checkingAssignment || !assignmentAnswer.trim()}
+                                    className="btn-secondary flex items-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                                  >
+                                    <MessageCircle className="w-5 h-5" />
+                                    <span>
+                                      {checkingAssignment ? 'Проверка...' : 'Проверить ответ с ИИ'}
+                                    </span>
+                                  </button>
+
+                                  <button
+                                    type="button"
+                                    onClick={() => handleCheckAssignmentWithAI('help')}
+                                    disabled={checkingAssignment}
+                                    className="btn-secondary flex items-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                                  >
+                                    <MessageCircle className="w-5 h-5" />
+                                    <span>
+                                      {checkingAssignment ? 'ИИ думает...' : 'Помоги решить'}
+                                    </span>
+                                  </button>
+                                </div>
+                              )}
+
+                              {assignmentCheckResult && selectedAssignment?.id === assignment.id && (
+                                <div
+                                  className={`mt-4 p-4 rounded-xl border ${
+                                    assignmentCheckResult.is_correct
+                                      ? 'bg-green-50 border-green-200'
+                                      : 'bg-yellow-50 border-yellow-200'
+                                  }`}
                                 >
-                                  <Send className="w-5 h-5" />
-                                  <span>{submittingAssignment ? 'Отправка...' : 'Отправить задание'}</span>
-                                </button>
+                                  <div className="flex items-center mb-2 space-x-2">
+                                    <Check
+                                      className={`w-5 h-5 ${
+                                        assignmentCheckResult.is_correct
+                                          ? 'text-green-600'
+                                          : 'text-yellow-600'
+                                      }`}
+                                    />
+                                    <span
+                                      className={`font-semibold text-sm ${
+                                        assignmentCheckResult.is_correct
+                                          ? 'text-green-800'
+                                          : 'text-yellow-800'
+                                      }`}
+                                    >
+                                      {assignmentCheckResult.is_correct
+                                        ? 'Ответ выглядит правильным по мнению ИИ'
+                                        : 'ИИ считает, что ответ можно улучшить'}
+                                    </span>
+                                  </div>
+                                  <p className="text-sm text-gray-800 whitespace-pre-wrap">
+                                    {assignmentCheckResult.explanation}
+                                  </p>
+                                </div>
                               )}
 
                               {assignment.submission && (
