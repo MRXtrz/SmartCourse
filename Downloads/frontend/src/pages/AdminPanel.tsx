@@ -242,7 +242,10 @@ const AdminPanel = () => {
     return (
       <Layout>
         <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+          <div className="relative">
+            <div className="animate-spin rounded-full h-16 w-16 border-4 border-purple-500/30 border-t-purple-500"></div>
+            <div className="absolute inset-0 animate-spin rounded-full h-16 w-16 border-4 border-cyan-500/30 border-t-cyan-500" style={{ animationDirection: 'reverse', animationDuration: '1.5s' }}></div>
+          </div>
         </div>
       </Layout>
     );
@@ -252,7 +255,9 @@ const AdminPanel = () => {
     <Layout>
       <div className="space-y-8">
         <div className="flex items-center justify-between">
-          <h1 className="text-3xl font-bold text-gray-900">Admin Panel</h1>
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent neon-text">
+            Admin Panel
+          </h1>
           <div className="flex space-x-3">
             <button onClick={() => setShowAdminModal(true)} className="btn-secondary">
               <Shield className="w-5 h-5 mr-2 inline" />
@@ -266,34 +271,34 @@ const AdminPanel = () => {
         </div>
 
         <div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Courses</h2>
+          <h2 className="text-2xl font-bold text-white mb-4 bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">Courses</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {courses.map((course) => (
               <div key={course.id} className="card">
                 <div className="flex items-start justify-between mb-4">
-                  <div className="bg-gradient-to-r from-blue-500 to-indigo-500 p-3 rounded-xl">
+                  <div className="bg-gradient-to-r from-purple-600 to-cyan-500 p-3 rounded-xl shadow-lg glow-effect">
                     <BookOpen className="w-6 h-6 text-white" />
                   </div>
                   <div className="flex space-x-2">
                     <button
                       onClick={() => openCourseModal(course)}
-                      className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg"
+                      className="p-2 text-cyan-400 hover:bg-cyan-500/20 rounded-lg transition-all duration-300 hover:scale-110"
                     >
                       <Edit className="w-5 h-5" />
                     </button>
                     <button
                       onClick={() => handleDeleteCourse(course.id)}
-                      className="p-2 text-red-600 hover:bg-red-50 rounded-lg"
+                      className="p-2 text-red-400 hover:bg-red-500/20 rounded-lg transition-all duration-300 hover:scale-110"
                     >
                       <Trash2 className="w-5 h-5" />
                     </button>
                   </div>
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2">{course.title}</h3>
-                <p className="text-gray-600 text-sm mb-4">{course.description}</p>
+                <h3 className="text-xl font-bold text-white mb-2">{course.title}</h3>
+                <p className="text-gray-300 text-sm mb-4">{course.description}</p>
                 <button
                   onClick={() => setSelectedCourseId(course.id)}
-                  className="text-blue-600 hover:text-blue-700 font-semibold text-sm"
+                  className="text-cyan-400 hover:text-cyan-300 font-semibold text-sm transition-colors duration-300"
                 >
                   Manage Lessons →
                 </button>
@@ -305,7 +310,7 @@ const AdminPanel = () => {
         {selectedCourseId && (
           <div>
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-2xl font-bold text-gray-900">Lessons</h2>
+              <h2 className="text-2xl font-bold text-white bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">Lessons</h2>
               <button onClick={() => openLessonModal()} className="btn-primary">
                 <Plus className="w-5 h-5 mr-2 inline" />
                 Create Lesson
@@ -317,10 +322,10 @@ const AdminPanel = () => {
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
                       <div className="flex items-center space-x-2 mb-2">
-                        <FileText className="w-5 h-5 text-gray-400" />
-                        <h3 className="text-lg font-bold text-gray-900">{lesson.title}</h3>
+                        <FileText className="w-5 h-5 text-cyan-400" />
+                        <h3 className="text-lg font-bold text-white">{lesson.title}</h3>
                       </div>
-                      <p className="text-gray-600 text-sm line-clamp-2">{lesson.content}</p>
+                      <p className="text-gray-300 text-sm line-clamp-2">{lesson.content}</p>
                     </div>
                     <div className="flex space-x-2 ml-4">
                       <button
@@ -328,20 +333,20 @@ const AdminPanel = () => {
                           setSelectedLessonId(lesson.id);
                           fetchAssignments(lesson.id);
                         }}
-                        className="p-2 text-purple-600 hover:bg-purple-50 rounded-lg"
+                        className="p-2 text-purple-400 hover:bg-purple-500/20 rounded-lg transition-all duration-300 hover:scale-110"
                         title="Manage Assignments"
                       >
                         <ClipboardList className="w-5 h-5" />
                       </button>
                       <button
                         onClick={() => openLessonModal(lesson)}
-                        className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg"
+                        className="p-2 text-cyan-400 hover:bg-cyan-500/20 rounded-lg transition-all duration-300 hover:scale-110"
                       >
                         <Edit className="w-5 h-5" />
                       </button>
                       <button
                         onClick={() => handleDeleteLesson(lesson.id)}
-                        className="p-2 text-red-600 hover:bg-red-50 rounded-lg"
+                        className="p-2 text-red-400 hover:bg-red-500/20 rounded-lg transition-all duration-300 hover:scale-110"
                       >
                         <Trash2 className="w-5 h-5" />
                       </button>
@@ -356,7 +361,7 @@ const AdminPanel = () => {
         {selectedLessonId && (
           <div>
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-2xl font-bold text-gray-900">Assignments</h2>
+              <h2 className="text-2xl font-bold text-white bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">Assignments</h2>
               <button onClick={() => openAssignmentModal()} className="btn-primary">
                 <Plus className="w-5 h-5 mr-2 inline" />
                 Create Assignment
@@ -369,20 +374,20 @@ const AdminPanel = () => {
                     <div className="flex-1">
                       <div className="flex items-center space-x-2 mb-2">
                         <ClipboardList className="w-5 h-5 text-purple-400" />
-                        <h3 className="text-lg font-bold text-gray-900">{assignment.title}</h3>
+                        <h3 className="text-lg font-bold text-white">{assignment.title}</h3>
                       </div>
-                      <p className="text-gray-600 text-sm line-clamp-2">{assignment.description}</p>
+                      <p className="text-gray-300 text-sm line-clamp-2">{assignment.description}</p>
                     </div>
                     <div className="flex space-x-2 ml-4">
                       <button
                         onClick={() => openAssignmentModal(assignment)}
-                        className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg"
+                        className="p-2 text-cyan-400 hover:bg-cyan-500/20 rounded-lg transition-all duration-300 hover:scale-110"
                       >
                         <Edit className="w-5 h-5" />
                       </button>
                       <button
                         onClick={() => handleDeleteAssignment(assignment.id)}
-                        className="p-2 text-red-600 hover:bg-red-50 rounded-lg"
+                        className="p-2 text-red-400 hover:bg-red-500/20 rounded-lg transition-all duration-300 hover:scale-110"
                       >
                         <Trash2 className="w-5 h-5" />
                       </button>
@@ -395,14 +400,14 @@ const AdminPanel = () => {
         )}
 
         {showCourseModal && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-2xl p-6 max-w-md w-full">
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">
+          <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+            <div className="card max-w-md w-full border-2 border-purple-500/50">
+              <h3 className="text-2xl font-bold text-white mb-4 bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
                 {editingCourse ? 'Edit Course' : 'Create Course'}
               </h3>
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-semibold text-gray-300 mb-2">
                     Title
                   </label>
                   <input
@@ -413,7 +418,7 @@ const AdminPanel = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-semibold text-gray-300 mb-2">
                     Description
                   </label>
                   <textarea
@@ -437,14 +442,14 @@ const AdminPanel = () => {
         )}
 
         {showLessonModal && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-2xl p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">
+          <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+            <div className="card max-w-2xl w-full max-h-[90vh] overflow-y-auto border-2 border-purple-500/50">
+              <h3 className="text-2xl font-bold text-white mb-4 bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
                 {editingLesson ? 'Edit Lesson' : 'Create Lesson'}
               </h3>
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-semibold text-gray-300 mb-2">
                     Title
                   </label>
                   <input
@@ -455,7 +460,7 @@ const AdminPanel = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-semibold text-gray-300 mb-2">
                     Content
                   </label>
                   <textarea
@@ -479,14 +484,14 @@ const AdminPanel = () => {
         )}
 
         {showAssignmentModal && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-2xl p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">
+          <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+            <div className="card max-w-2xl w-full max-h-[90vh] overflow-y-auto border-2 border-purple-500/50">
+              <h3 className="text-2xl font-bold text-white mb-4 bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
                 {editingAssignment ? 'Edit Assignment' : 'Create Assignment'}
               </h3>
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-semibold text-gray-300 mb-2">
                     Title
                   </label>
                   <input
@@ -497,7 +502,7 @@ const AdminPanel = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-semibold text-gray-300 mb-2">
                     Description
                   </label>
                   <textarea
@@ -508,7 +513,7 @@ const AdminPanel = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-semibold text-gray-300 mb-2">
                     Instructions
                   </label>
                   <textarea
@@ -541,15 +546,15 @@ const AdminPanel = () => {
         )}
 
         {showAdminModal && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-2xl p-6 max-w-md w-full">
-              <h3 className="text-2xl font-bold text-gray-900 mb-4 flex items-center space-x-2">
-                <Shield className="w-6 h-6 text-purple-600" />
-                <span>Create Admin User</span>
+          <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+            <div className="card max-w-md w-full border-2 border-purple-500/50">
+              <h3 className="text-2xl font-bold text-white mb-4 flex items-center space-x-2">
+                <Shield className="w-6 h-6 text-purple-400" />
+                <span className="bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">Create Admin User</span>
               </h3>
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-semibold text-gray-300 mb-2">
                     Name
                   </label>
                   <input
@@ -561,7 +566,7 @@ const AdminPanel = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-semibold text-gray-300 mb-2">
                     Email
                   </label>
                   <input
@@ -573,7 +578,7 @@ const AdminPanel = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-semibold text-gray-300 mb-2">
                     Password
                   </label>
                   <input
@@ -585,7 +590,7 @@ const AdminPanel = () => {
                     minLength={6}
                   />
                 </div>
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 text-sm text-blue-800">
+                <div className="bg-blue-900/30 border-2 border-blue-500/50 rounded-lg p-3 text-sm text-blue-300">
                   <strong>Note:</strong> First admin should be created via terminal script for security.
                 </div>
                 <div className="flex space-x-4">

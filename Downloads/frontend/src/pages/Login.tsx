@@ -27,39 +27,46 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 opacity-10"></div>
+    <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
+      {/* Animated background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-purple-900 to-indigo-900"></div>
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(168,85,247,0.1),transparent_50%)]"></div>
+      <div className="absolute top-0 left-0 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-pulse"></div>
+      <div className="absolute bottom-0 right-0 w-96 h-96 bg-cyan-500/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
       
       <div className="max-w-md w-full space-y-8 relative z-10">
         <div className="text-center">
-          <div className="flex justify-center mb-4">
-            <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-4 rounded-2xl shadow-xl">
-              <GraduationCap className="w-12 h-12 text-white" />
+          <div className="flex justify-center mb-6 floating">
+            <div className="relative bg-gradient-to-r from-purple-600 via-pink-600 to-cyan-500 p-6 rounded-3xl shadow-2xl glow-effect">
+              <GraduationCap className="w-16 h-16 text-white" />
+              <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 to-pink-500 rounded-3xl opacity-0 hover:opacity-100 transition-opacity duration-500 blur-xl"></div>
             </div>
           </div>
-          <h2 className="text-4xl font-bold text-gray-900 mb-2">Welcome Back!</h2>
-          <p className="text-gray-600">Sign in to continue your learning journey</p>
+          <h2 className="text-5xl font-bold mb-3 bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent neon-text">
+            Welcome Back!
+          </h2>
+          <p className="text-gray-300 text-lg">Sign in to continue your learning journey</p>
         </div>
 
         <div className="card">
           <form className="space-y-6" onSubmit={handleSubmit}>
             {error && (
-              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl">
+              <div className="bg-red-900/50 border-2 border-red-500/50 text-red-200 px-4 py-3 rounded-xl backdrop-blur-sm">
                 {error}
               </div>
             )}
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-semibold text-gray-300 mb-3">
                 Email Address
               </label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 text-purple-400 w-5 h-5" />
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="input-field pl-10"
+                  className="input-field pl-12"
                   placeholder="you@example.com"
                   required
                 />
@@ -67,16 +74,16 @@ const Login = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-semibold text-gray-300 mb-3">
                 Password
               </label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 text-purple-400 w-5 h-5" />
                 <input
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="input-field pl-10"
+                  className="input-field pl-12"
                   placeholder="••••••••"
                   required
                 />
@@ -86,16 +93,23 @@ const Login = () => {
             <button
               type="submit"
               disabled={loading}
-              className="btn-primary w-full"
+              className="btn-primary w-full disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {loading ? 'Signing in...' : 'Sign In'}
+              {loading ? (
+                <span className="flex items-center justify-center">
+                  <span className="animate-spin mr-2">⏳</span>
+                  Signing in...
+                </span>
+              ) : (
+                'Sign In'
+              )}
             </button>
           </form>
 
           <div className="mt-6 text-center">
-            <p className="text-gray-600">
+            <p className="text-gray-400">
               Don't have an account?{' '}
-              <Link to="/register" className="text-blue-600 hover:text-blue-700 font-semibold">
+              <Link to="/register" className="text-cyan-400 hover:text-cyan-300 font-semibold transition-colors duration-300 hover:underline">
                 Sign up
               </Link>
             </p>

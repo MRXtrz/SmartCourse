@@ -148,7 +148,10 @@ const CoursePage = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <div className="relative">
+          <div className="animate-spin rounded-full h-16 w-16 border-4 border-purple-500/30 border-t-purple-500"></div>
+          <div className="absolute inset-0 animate-spin rounded-full h-16 w-16 border-4 border-cyan-500/30 border-t-cyan-500" style={{ animationDirection: 'reverse', animationDuration: '1.5s' }}></div>
+        </div>
       </div>
     );
   }
@@ -158,43 +161,44 @@ const CoursePage = () => {
         <div className="flex items-center justify-between">
           <button
             onClick={() => navigate('/dashboard')}
-            className="flex items-center space-x-2 text-gray-600 hover:text-gray-900"
+            className="flex items-center space-x-2 text-gray-300 hover:text-white bg-gray-800/50 hover:bg-gray-700/50 px-5 py-3 rounded-xl transition-all duration-300 border border-purple-500/30 hover:border-cyan-400/50"
           >
             <ArrowLeft className="w-5 h-5" />
             <span>Back to Dashboard</span>
           </button>
         </div>
 
-        <div className="relative bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 rounded-3xl p-8 md:p-10 text-white shadow-2xl overflow-hidden">
-          <div className="absolute inset-0 bg-black opacity-10"></div>
-          <div className="absolute top-0 right-0 w-64 h-64 bg-white opacity-5 rounded-full -mr-32 -mt-32"></div>
+        <div className="relative bg-gradient-to-r from-purple-600 via-pink-600 to-cyan-500 rounded-3xl p-8 md:p-10 text-white shadow-2xl overflow-hidden glow-effect">
+          <div className="absolute inset-0 bg-black opacity-20"></div>
+          <div className="absolute top-0 right-0 w-96 h-96 bg-white opacity-10 rounded-full -mr-48 -mt-48 blur-3xl"></div>
+          <div className="absolute bottom-0 left-0 w-72 h-72 bg-cyan-400 opacity-10 rounded-full -ml-36 -mb-36 blur-3xl"></div>
           <div className="relative">
             <div className="flex items-start justify-between mb-6">
               <div className="flex-1">
                 <div className="flex items-center space-x-4 mb-4">
-                  <div className="bg-white bg-opacity-20 backdrop-blur-sm p-4 rounded-2xl">
+                  <div className="bg-white/20 backdrop-blur-md p-4 rounded-2xl border border-white/30 floating">
                     <BookOpen className="w-8 h-8" />
                   </div>
                   <div>
-                    <h1 className="text-3xl md:text-4xl font-bold mb-2 drop-shadow-lg">{course?.title}</h1>
-                    <p className="text-blue-100 text-lg">{course?.description}</p>
+                    <h1 className="text-3xl md:text-4xl font-bold mb-2 drop-shadow-2xl neon-text">{course?.title}</h1>
+                    <p className="text-cyan-100 text-lg">{course?.description}</p>
                   </div>
                 </div>
 
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-blue-100 font-medium text-lg">Course Progress</span>
-                    <span className="font-bold text-2xl">
+                    <span className="text-cyan-100 font-semibold text-lg">Course Progress</span>
+                    <span className="font-bold text-3xl neon-text">
                       {progressPercentage.toFixed(0)}%
                     </span>
                   </div>
-                  <div className="progress-bar bg-white bg-opacity-20 backdrop-blur-sm h-4 rounded-full">
+                  <div className="progress-bar bg-white/20 backdrop-blur-sm h-5 rounded-full">
                     <div 
-                      className="progress-fill bg-white h-full rounded-full" 
+                      className="progress-fill h-full rounded-full" 
                       style={{ width: `${progressPercentage}%` }}
                     ></div>
                   </div>
-                  <p className="text-blue-100 text-sm">
+                  <p className="text-cyan-100 text-sm font-medium">
                     {completedLessons} of {lessons.length} lessons completed
                   </p>
                 </div>
@@ -206,8 +210,8 @@ const CoursePage = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-1">
             <div className="card">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">Lessons</h2>
-              <div className="space-y-2 max-h-[600px] overflow-y-auto">
+              <h2 className="text-xl font-bold text-white mb-4 bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">Lessons</h2>
+              <div className="space-y-3 max-h-[600px] overflow-y-auto">
                 {lessons.map((lesson, index) => (
                   <button
                     key={lesson.id}
@@ -216,27 +220,29 @@ const CoursePage = () => {
                       setShowAITutor(false);
                       await fetchAssignments(lesson.id);
                     }}
-                    className={`w-full text-left p-4 rounded-xl transition-all ${
+                    className={`w-full text-left p-4 rounded-xl transition-all duration-300 ${
                       selectedLesson?.id === lesson.id
-                        ? 'bg-blue-50 border-2 border-blue-500'
-                        : 'bg-gray-50 hover:bg-gray-100 border-2 border-transparent'
+                        ? 'bg-gradient-to-r from-purple-600/50 to-pink-600/50 border-2 border-cyan-400 shadow-lg glow-effect'
+                        : 'bg-gray-800/50 hover:bg-gray-700/50 border-2 border-transparent hover:border-purple-500/50'
                     }`}
                   >
                     <div className="flex items-start space-x-3">
                       <div className="mt-1">
                         {lesson.completed ? (
-                          <CheckCircle2 className="w-5 h-5 text-green-500" />
+                          <CheckCircle2 className="w-6 h-6 text-green-400" />
                         ) : (
-                          <Circle className="w-5 h-5 text-gray-400" />
+                          <Circle className="w-6 h-6 text-gray-400" />
                         )}
                       </div>
                       <div className="flex-1">
                         <div className="flex items-center justify-between">
-                          <span className="text-xs text-gray-500 font-medium">
+                          <span className="text-xs text-gray-400 font-semibold">
                             Lesson {index + 1}
                           </span>
                         </div>
-                        <p className="font-semibold text-gray-900 mt-1">
+                        <p className={`font-semibold mt-1 ${
+                          selectedLesson?.id === lesson.id ? 'text-white' : 'text-gray-300'
+                        }`}>
                           {lesson.title}
                         </p>
                       </div>
@@ -252,23 +258,23 @@ const CoursePage = () => {
               <>
                 <div className="card">
                   <div className="flex items-center justify-between mb-4">
-                    <h2 className="text-2xl font-bold text-gray-900">
+                    <h2 className="text-2xl font-bold text-white bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
                       {selectedLesson.title}
                     </h2>
                     {selectedLesson.completed && (
-                      <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-semibold">
+                      <span className="bg-gradient-to-r from-green-500 to-emerald-500 text-white px-4 py-2 rounded-full text-sm font-semibold shadow-lg glow-effect">
                         Completed
                       </span>
                     )}
                   </div>
 
                   <div className="prose max-w-none mb-6">
-                    <div className="text-gray-700 whitespace-pre-wrap leading-relaxed">
+                    <div className="text-gray-300 whitespace-pre-wrap leading-relaxed text-base">
                       {selectedLesson.content}
                     </div>
                   </div>
 
-                  <div className="flex items-center space-x-4 pt-4 border-t border-gray-200">
+                  <div className="flex items-center space-x-4 pt-4 border-t border-purple-500/30">
                     {!selectedLesson.completed && (
                       <button
                         onClick={() => handleCompleteLesson(selectedLesson.id)}
@@ -298,31 +304,31 @@ const CoursePage = () => {
                 {assignments.length > 0 && (
                   <div className="card">
                     <div className="flex items-center space-x-2 mb-4">
-                      <FileText className="w-6 h-6 text-blue-600" />
-                      <h2 className="text-2xl font-bold text-gray-900">Задания</h2>
+                      <FileText className="w-6 h-6 text-cyan-400" />
+                      <h2 className="text-2xl font-bold text-white bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">Задания</h2>
                     </div>
 
                     <div className="space-y-4">
                       {assignments.map((assignment) => (
                         <div
                           key={assignment.id}
-                          className={`border-2 rounded-xl p-4 transition-all ${
+                          className={`border-2 rounded-xl p-4 transition-all duration-300 ${
                             selectedAssignment?.id === assignment.id
-                              ? 'border-blue-500 bg-blue-50'
-                              : 'border-gray-200 hover:border-gray-300'
+                              ? 'border-cyan-400 bg-gradient-to-br from-purple-600/30 to-pink-600/30 shadow-lg glow-effect'
+                              : 'border-purple-500/30 hover:border-cyan-400/50 bg-gray-800/30'
                           }`}
                         >
                           <div className="flex items-start justify-between mb-3">
                             <div className="flex-1">
-                              <h3 className="text-lg font-bold text-gray-900 mb-1">
+                              <h3 className="text-lg font-bold text-white mb-1">
                                 {assignment.title}
                               </h3>
-                              <p className="text-gray-600 text-sm mb-2">
+                              <p className="text-gray-300 text-sm mb-2">
                                 {assignment.description}
                               </p>
                               {assignment.submission && (
-                                <div className="flex items-center space-x-2 text-green-600 mb-2">
-                                  <Check className="w-4 h-4" />
+                                <div className="flex items-center space-x-2 text-green-400 mb-2">
+                                  <Check className="w-5 h-5" />
                                   <span className="text-sm font-semibold">Выполнено</span>
                                 </div>
                               )}
@@ -332,10 +338,10 @@ const CoursePage = () => {
                                 setSelectedAssignment(assignment);
                                 setAssignmentAnswer(assignment.submission?.answer || '');
                               }}
-                              className={`px-3 py-1 rounded-lg text-sm font-medium transition-colors ${
+                              className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300 ${
                                 selectedAssignment?.id === assignment.id
-                                  ? 'bg-blue-600 text-white'
-                                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                  ? 'bg-gradient-to-r from-cyan-500 to-purple-500 text-white shadow-lg'
+                                  : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
                               }`}
                             >
                               {selectedAssignment?.id === assignment.id ? 'Выбрано' : 'Выбрать'}
@@ -343,18 +349,18 @@ const CoursePage = () => {
                           </div>
 
                           {selectedAssignment?.id === assignment.id && (
-                            <div className="mt-4 pt-4 border-t border-gray-200">
+                            <div className="mt-4 pt-4 border-t border-purple-500/30">
                               <div className="mb-3">
-                                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                                <label className="block text-sm font-semibold text-gray-300 mb-2">
                                   Инструкции:
                                 </label>
-                                <div className="bg-gray-50 p-3 rounded-lg text-sm text-gray-700 whitespace-pre-wrap">
+                                <div className="bg-gray-800/50 p-4 rounded-lg text-sm text-gray-300 whitespace-pre-wrap border border-purple-500/20">
                                   {assignment.instructions}
                                 </div>
                               </div>
 
                               <div className="mb-3">
-                                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                                <label className="block text-sm font-semibold text-gray-300 mb-2">
                                   Ваш ответ:
                                 </label>
                                 <textarea
@@ -362,7 +368,7 @@ const CoursePage = () => {
                                   onChange={(e) => setAssignmentAnswer(e.target.value)}
                                   disabled={!!assignment.submission}
                                   rows={6}
-                                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
+                                  className="input-field disabled:bg-gray-800/30 disabled:cursor-not-allowed"
                                   placeholder="Введите ваш ответ здесь..."
                                 />
                               </div>
@@ -406,25 +412,25 @@ const CoursePage = () => {
 
                               {assignmentCheckResult && selectedAssignment?.id === assignment.id && (
                                 <div
-                                  className={`mt-4 p-4 rounded-xl border ${
+                                  className={`mt-4 p-4 rounded-xl border-2 ${
                                     assignmentCheckResult.is_correct
-                                      ? 'bg-green-50 border-green-200'
-                                      : 'bg-yellow-50 border-yellow-200'
+                                      ? 'bg-green-900/30 border-green-500/50'
+                                      : 'bg-yellow-900/30 border-yellow-500/50'
                                   }`}
                                 >
                                   <div className="flex items-center mb-2 space-x-2">
                                     <Check
                                       className={`w-5 h-5 ${
                                         assignmentCheckResult.is_correct
-                                          ? 'text-green-600'
-                                          : 'text-yellow-600'
+                                          ? 'text-green-400'
+                                          : 'text-yellow-400'
                                       }`}
                                     />
                                     <span
                                       className={`font-semibold text-sm ${
                                         assignmentCheckResult.is_correct
-                                          ? 'text-green-800'
-                                          : 'text-yellow-800'
+                                          ? 'text-green-300'
+                                          : 'text-yellow-300'
                                       }`}
                                     >
                                       {assignmentCheckResult.is_correct
@@ -432,18 +438,18 @@ const CoursePage = () => {
                                         : 'ИИ считает, что ответ можно улучшить'}
                                     </span>
                                   </div>
-                                  <p className="text-sm text-gray-800 whitespace-pre-wrap">
+                                  <p className="text-sm text-gray-300 whitespace-pre-wrap">
                                     {assignmentCheckResult.explanation}
                                   </p>
                                 </div>
                               )}
 
                               {assignment.submission && (
-                                <div className="mt-3 p-3 bg-green-50 border border-green-200 rounded-lg">
-                                  <p className="text-sm text-green-800 font-semibold mb-1">
+                                <div className="mt-3 p-4 bg-green-900/30 border-2 border-green-500/50 rounded-lg">
+                                  <p className="text-sm text-green-300 font-semibold mb-1">
                                     Ваш ответ (отправлен {new Date(assignment.submission.completed_at || assignment.submission.created_at).toLocaleDateString('ru-RU')}):
                                   </p>
-                                  <p className="text-sm text-gray-700 whitespace-pre-wrap">
+                                  <p className="text-sm text-gray-300 whitespace-pre-wrap">
                                     {assignment.submission.answer}
                                   </p>
                                 </div>
@@ -458,8 +464,8 @@ const CoursePage = () => {
               </>
             ) : (
               <div className="card text-center py-12">
-                <BookOpen className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                <p className="text-gray-600">Select a lesson to begin</p>
+                <BookOpen className="w-20 h-20 text-gray-400 mx-auto mb-4 opacity-50" />
+                <p className="text-gray-300 text-lg">Select a lesson to begin</p>
               </div>
             )}
           </div>
